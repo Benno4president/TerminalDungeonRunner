@@ -142,8 +142,8 @@ class WormEnemy(Enemy):
 
 
 class WormWorldFucker(WormEnemy):
-    def __init__(self, position):
-        super(WormWorldFucker, self).__init__(position, symbol=ANSI_RAINBOW('{}'), length=12)
+    def __init__(self, position, length=12):
+        super(WormWorldFucker, self).__init__(position, symbol=ANSI_RAINBOW('{}'), length=length)
         self.hp = 10
 
 

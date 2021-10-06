@@ -96,8 +96,20 @@ class SpecialRoomFactory:
         self.room_count = 0
         self.rooms = {
             1: self.shop_room,
-            2: self.fire_place_room
+            2: self.fire_place_room,
+            3: self.boss_worms
         }
+        """ shop dict: id: list[ Shop name, instance, price ] """
+        self.shop_item_selection = {
+            1: ['Rail Shot:', RailShot(), random.randint(5, 9)],
+            2: ['Broad Shot:', MultiShot(), random.randint(5, 9)],
+            3: ['Neon Cat:', NeonCat(), random.randint(5, 9)]
+        }
+
+    def get_random_shop_item(self):
+        item_num = random.randint(1, len(self.shop_item_selection))
+        item = self.shop_item_selection[item_num]
+        return item
 
     def get_next_room(self, player, entities_on_map):
         self.room_count += 1
@@ -119,11 +131,6 @@ class SpecialRoomFactory:
         entities_on_map.extend(TextBox.add_word([14, 10], 'Leave this cursed game: l'))
 
     def shop_room(self, player, entities_on_map):
-        shop_item_selection = {
-            1: ['Rail Shot:', RailShot(), random.randint(5, 9)],
-            2: ['Broad Shot:', MultiShot(), random.randint(5, 9)],
-            3: ['Neon Cat:', NeonCat(), random.randint(5, 9)]
-        }
 
         entities_on_map.append(Wall([1, 1], 18, 11))
         entities_on_map.extend(TextBox.add_word([1, 28], 'Yee ol\' Shop'))
@@ -135,9 +142,8 @@ class SpecialRoomFactory:
         entities_on_map.extend(TextBox.add_word([18, 30], '  UU  UU'))
 
         tile_num = 3
-        for i in range(random.randint(1, len(shop_item_selection))):
-            item_num = random.randint(1, len(shop_item_selection))
-            item = shop_item_selection[item_num]
+        for i in range(random.randint(1, 5)):
+            item = self.get_random_shop_item()
             entities_on_map.extend(TextBox.add_word([tile_num, 13], item[0] + str(item[2]) + '$'))
             tile_num += 1
             entities_on_map.append(BuyTile([tile_num, 14], item[1], price=item[2]))
@@ -151,8 +157,18 @@ class SpecialRoomFactory:
         entities.extend(TextBox.add_word([8, 13], '  ,---/V\\'))
         entities.extend(TextBox.add_word([9, 13], ' ~|__(o.o)'))
 
-        entities.extend(TextBox.add_word([9, 24],  '   )'))
+        entities.extend(TextBox.add_word([9, 24], '   )'))
         entities.extend(TextBox.add_word([10, 24], '  ) \\'))
         entities.extend(TextBox.add_word([11, 24], ' \\(_)/'))
 
         entities.append(HealingHeart([10, 20]))
+
+    def boss_worms(self, player, entities):
+        entities.append(BuyTile([5, 20], self.get_random_shop_item()[1]))
+        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
+        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
+        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
+        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
+        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
+
+
