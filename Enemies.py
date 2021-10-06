@@ -27,7 +27,8 @@ class Enemy(Entity):
         return False
 
     def death_drops(self):
-        return [Coin(self.pos[0])]
+        if random.randint(1, 3) == 1:
+            return [Coin(self.pos[0])]
 
 
 class SprayerEnemy(Enemy):

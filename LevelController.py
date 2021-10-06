@@ -129,6 +129,8 @@ class SpecialRoomFactory:
         entities_on_map.extend(TextBox.add_word([10, 10], 'Move: wasd'))
         entities_on_map.extend(TextBox.add_word([12, 10], 'Shoot: m'))
         entities_on_map.extend(TextBox.add_word([14, 10], 'Leave this cursed game: l'))
+        entities_on_map.append(BuyTile([1, 7], RailShot()))
+        entities_on_map.append(BuyTile([1, 7], RailShot()))
 
     def shop_room(self, player, entities_on_map):
 
