@@ -3,7 +3,7 @@ import random
 from Enemies import Enemy, BruteEnemy, SprayerEnemy, FloaterEnemy, WormEnemy, WormWorldFucker
 from Enums import EntType
 from Misc import clearConsole
-from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot
+from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot, HealingHeart
 
 
 class LevelHandler:
@@ -94,13 +94,19 @@ class LevelHandler:
 class SpecialRoomFactory:
     def __init__(self):
         self.room_count = 0
+        self.rooms = {
+            1: self.shop_room,
+            2: self.fire_place_room
+        }
 
     def get_next_room(self, player, entities_on_map):
         self.room_count += 1
         if self.room_count == 1:
             self.start_room(player, entities_on_map)
         else:
-            self.shop_room(player, entities_on_map)
+            room_num = random.randint(1, len(self.rooms))
+            room_func = self.rooms[room_num]
+            room_func(player, entities_on_map)
 
     def start_room(self, player, entities_on_map):
         entities_on_map.extend(TextBox.add_word([1, 10], 'Hello there,'))
@@ -137,3 +143,16 @@ class SpecialRoomFactory:
             entities_on_map.append(BuyTile([tile_num, 14], item[1], price=item[2]))
             tile_num += 2
 
+    def fire_place_room(self, player, entities):
+        entities.extend(TextBox.add_word([1, 20], '..a fireplace'))
+        entities.extend(TextBox.add_word([5, 13], '> zzz *UwUaua*,'))
+        entities.extend(TextBox.add_word([6, 13], '  Something to'))
+        entities.extend(TextBox.add_word([7, 13], '  sleep on? zzz'))
+        entities.extend(TextBox.add_word([8, 13], '  ,---/V\\'))
+        entities.extend(TextBox.add_word([9, 13], ' ~|__(o.o)'))
+
+        entities.extend(TextBox.add_word([9, 24],  '   )'))
+        entities.extend(TextBox.add_word([10, 24], '  ) \\'))
+        entities.extend(TextBox.add_word([11, 24], ' \\(_)/'))
+
+        entities.append(HealingHeart([10, 20]))
