@@ -103,28 +103,37 @@ class SpecialRoomFactory:
             self.shop_room(player, entities_on_map)
 
     def start_room(self, player, entities_on_map):
-        entities_on_map.append(WormEnemy([10, 10]))
-        entities_on_map.append(WormWorldFucker([10, 10]))
-        entities_on_map.append(Wall([1, 1], 18, 11))
-        entities_on_map.extend(TextBox.add_word([1, 28], 'Yee ol\' Shop'))
-        entities_on_map.extend(TextBox.add_word([2, 13], 'SHOT UP'))
-        entities_on_map.append(BuyTile([3, 14], MultiShot(), price=0))
-        entities_on_map.append(BuyTile([3, 16], MultiShot(), price=0))
-        entities_on_map.append(BuyTile([3, 18], MultiShot(), price=0))
-        entities_on_map.append(BuyTile([3, 20], MultiShot(), price=0))
-        entities_on_map.extend(TextBox.add_word([5, 13], 'NEON CAT'))
-        entities_on_map.append(BuyTile([6, 14], NeonCat(), price=0))
-        entities_on_map.append(BuyTile([6, 16], NeonCat(), price=0))
-        entities_on_map.append(BuyTile([6, 18], NeonCat(), price=0))
-        entities_on_map.append(BuyTile([6, 20], NeonCat(), price=0))
-        entities_on_map.extend(TextBox.add_word([8, 13], 'RAIL SHOT'))
-        entities_on_map.append(BuyTile([9, 14], RailShot(), price=0))
-        entities_on_map.append(BuyTile([9, 16], RailShot(), price=0))
-        entities_on_map.append(BuyTile([9, 18], RailShot(), price=0))
-        entities_on_map.append(BuyTile([9, 20], RailShot(), price=0))
+        entities_on_map.extend(TextBox.add_word([1, 10], 'Hello there,'))
+        entities_on_map.extend(TextBox.add_word([2, 10], 'welcome to a generic terminal dungeon runner'))
+        entities_on_map.extend(TextBox.add_word([3, 10], 'May you journey be filled with horrible'))
+        entities_on_map.extend(TextBox.add_word([4, 10], 'bugs and bullsh*t spawn deaths'))
+        entities_on_map.extend(TextBox.add_word([6, 10], 'Good fucking luck.'))
+        entities_on_map.extend(TextBox.add_word([10, 10], 'Move: wasd'))
+        entities_on_map.extend(TextBox.add_word([12, 10], 'Shoot: m'))
+        entities_on_map.extend(TextBox.add_word([14, 10], 'Leave this cursed game: l'))
 
     def shop_room(self, player, entities_on_map):
-        entities_on_map.append(BuyTile([6, 20], MultiShot(), price=1))
-        entities_on_map.append(BuyTile([8, 20], NeonCat(), price=1))
-        entities_on_map.append(BuyTile([10, 20], NeonCat(), price=1))
-        entities_on_map.append(BuyTile([12, 20], NeonCat(), price=1))
+        shop_item_selection = {
+            1: ['Rail Shot:', RailShot(), random.randint(5, 9)],
+            2: ['Broad Shot:', MultiShot(), random.randint(5, 9)],
+            3: ['Neon Cat:', NeonCat(), random.randint(5, 9)]
+        }
+
+        entities_on_map.append(Wall([1, 1], 18, 11))
+        entities_on_map.extend(TextBox.add_word([1, 28], 'Yee ol\' Shop'))
+        entities_on_map.extend(TextBox.add_word([12, 30], '> Welcome UwU,'))
+        entities_on_map.extend(TextBox.add_word([13, 30], '  puiz buy my stuff<3<3'))
+        entities_on_map.extend(TextBox.add_word([14, 30], '  i need herOwOin'))
+        entities_on_map.extend(TextBox.add_word([16, 30], '  ,---/V\\'))
+        entities_on_map.extend(TextBox.add_word([17, 30], ' ~|__(o.o)'))
+        entities_on_map.extend(TextBox.add_word([18, 30], '  UU  UU'))
+
+        tile_num = 3
+        for i in range(random.randint(1, len(shop_item_selection))):
+            item_num = random.randint(1, len(shop_item_selection))
+            item = shop_item_selection[item_num]
+            entities_on_map.extend(TextBox.add_word([tile_num, 13], item[0] + str(item[2]) + '$'))
+            tile_num += 1
+            entities_on_map.append(BuyTile([tile_num, 14], item[1], price=item[2]))
+            tile_num += 2
+

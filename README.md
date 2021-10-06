@@ -7,3 +7,4 @@ to play: open terminal and run main.py with python..
 
 Stuff to do:
 - better readme
+- cross platform support
