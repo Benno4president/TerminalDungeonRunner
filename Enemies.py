@@ -183,11 +183,3 @@ class BulletBlaster(Enemy):
                 Bullet(Direction.LEFT, self.pos, symbol=ANSI_RAINBOW('*')))
             return bullet_list
 
-    def damage_and_is_dead(self):
-        self.hp -= 1
-        if self.hp <= 0:
-            return True
-        return False
-
-    def death_drops(self):
-        return [Coin(self.pos[0])]
