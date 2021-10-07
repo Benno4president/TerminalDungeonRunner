@@ -3,7 +3,7 @@ import random
 from Enemies import BulletBlaster, Enemy, BruteEnemy, SprayerEnemy, FloaterEnemy, WormEnemy, WormWorldFucker
 from Enums import EntType
 from Misc import clearConsole
-from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot
+from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot, HealingHeart
 
 
 class LevelHandler:
@@ -95,37 +95,86 @@ class LevelHandler:
 class SpecialRoomFactory:
     def __init__(self):
         self.room_count = 0
+        self.rooms = {
+            1: self.shop_room,
+            2: self.fire_place_room,
+            3: self.item_for_worms_room
+        }
+        """ shop dict: id: list[ Shop name, instance, price ] """
+        self.shop_item_selection = {
+            1: ['Rail Shot:', RailShot(), 10],
+            2: ['Broad Shot:', MultiShot(), 12],
+            3: ['Neon Cat:', NeonCat(), 8]
+        }
+
+    def get_random_shop_item(self, rand_price: bool = True):
+        item_num = random.randint(1, len(self.shop_item_selection))
+        item = self.shop_item_selection[item_num][:]
+        if rand_price:
+            item[2] += random.randint(-5, 5)
+        return item
 
     def get_next_room(self, player, entities_on_map):
         self.room_count += 1
-        if self.room_count == 1:
+        if self.room_count == 1 or True:
             self.start_room(player, entities_on_map)
+            # self.shop_room(player, entities_on_map) # tester
         else:
-            self.shop_room(player, entities_on_map)
+            room_num = random.randint(1, len(self.rooms))
+            room_func = self.rooms[room_num]
+            room_func(player, entities_on_map)
 
     def start_room(self, player, entities_on_map):
-        entities_on_map.append(WormEnemy([10, 10]))
-        entities_on_map.append(WormWorldFucker([10, 10]))
-        entities_on_map.append(Wall([1, 1], 18, 11))
-        entities_on_map.extend(TextBox.add_word([1, 28], 'Yee ol\' Shop'))
-        entities_on_map.extend(TextBox.add_word([2, 13], 'SHOT UP'))
-        entities_on_map.append(BuyTile([3, 14], MultiShot(), price=0))
-        entities_on_map.append(BuyTile([3, 16], MultiShot(), price=0))
-        entities_on_map.append(BuyTile([3, 18], MultiShot(), price=0))
-        entities_on_map.append(BuyTile([3, 20], MultiShot(), price=0))
-        entities_on_map.extend(TextBox.add_word([5, 13], 'NEON CAT'))
-        entities_on_map.append(BuyTile([6, 14], NeonCat(), price=0))
-        entities_on_map.append(BuyTile([6, 16], NeonCat(), price=0))
-        entities_on_map.append(BuyTile([6, 18], NeonCat(), price=0))
-        entities_on_map.append(BuyTile([6, 20], NeonCat(), price=0))
-        entities_on_map.extend(TextBox.add_word([8, 13], 'RAIL SHOT'))
-        entities_on_map.append(BuyTile([9, 14], RailShot(), price=0))
-        entities_on_map.append(BuyTile([9, 16], RailShot(), price=0))
-        entities_on_map.append(BuyTile([9, 18], RailShot(), price=0))
-        entities_on_map.append(BuyTile([9, 20], RailShot(), price=0))
+        entities_on_map.extend(TextBox.add_word([1, 10], 'Hello there,'))
+        entities_on_map.extend(TextBox.add_word([2, 10], 'welcome to a generic terminal dungeon runner'))
+        entities_on_map.extend(TextBox.add_word([3, 10], 'May you journey be filled with horrible'))
+        entities_on_map.extend(TextBox.add_word([4, 10], 'bugs and bullsh*t spawn deaths'))
+        entities_on_map.extend(TextBox.add_word([6, 10], 'Good fucking luck.'))
+        entities_on_map.extend(TextBox.add_word([10, 10], 'Move: wasd'))
+        entities_on_map.extend(TextBox.add_word([12, 10], 'Shoot: m'))
+        entities_on_map.extend(TextBox.add_word([14, 10], 'Leave this cursed game: l'))
+        entities_on_map.append(BuyTile([1, 7], RailShot()))
+        entities_on_map.append(BuyTile([1, 5], RailShot()))
 
     def shop_room(self, player, entities_on_map):
-        entities_on_map.append(BuyTile([6, 20], MultiShot(), price=1))
-        entities_on_map.append(BuyTile([8, 20], NeonCat(), price=1))
-        entities_on_map.append(BuyTile([10, 20], NeonCat(), price=1))
-        entities_on_map.append(BuyTile([12, 20], NeonCat(), price=1))
+
+        entities_on_map.append(Wall([1, 1], 18, 11))
+        entities_on_map.extend(TextBox.add_word([1, 28], 'Yee ol\' Shop'))
+        entities_on_map.extend(TextBox.add_word([12, 30], '> Welcome UwU,'))
+        entities_on_map.extend(TextBox.add_word([13, 30], '  puiz buy my stuff<3<3'))
+        entities_on_map.extend(TextBox.add_word([14, 30], '  i need herOwOin'))
+        entities_on_map.extend(TextBox.add_word([16, 30], '  ,---/V\\'))
+        entities_on_map.extend(TextBox.add_word([17, 30], ' ~|__(o.o)'))
+        entities_on_map.extend(TextBox.add_word([18, 30], '  UU  UU'))
+
+        tile_num = 3
+        for i in range(random.randint(1, 5)):
+            item = self.get_random_shop_item()
+            entities_on_map.extend(TextBox.add_word([tile_num, 13], item[0] + str(item[2]) + '$'))
+            tile_num += 1
+            entities_on_map.append(BuyTile([tile_num, 14], item[1], price=item[2]))
+            tile_num += 2
+
+    def fire_place_room(self, player, entities):
+        entities.extend(TextBox.add_word([1, 20], '..a fireplace'))
+        entities.extend(TextBox.add_word([5, 13], '> zzz *UwUaua*,'))
+        entities.extend(TextBox.add_word([6, 13], '  Something to'))
+        entities.extend(TextBox.add_word([7, 13], '  sleep on? zzz'))
+        entities.extend(TextBox.add_word([8, 13], '  ,---/V\\'))
+        entities.extend(TextBox.add_word([9, 13], ' ~|__(o.o)'))
+
+        entities.extend(TextBox.add_word([9, 24], '   )'))
+        entities.extend(TextBox.add_word([10, 24], '  ) \\'))
+        entities.extend(TextBox.add_word([11, 24], ' \\(_)/'))
+
+        entities.append(HealingHeart([10, 20]))
+
+    def item_for_worms_room(self, player, entities):
+        entities.extend(TextBox.add_word([4, 18], '..at least it\'s free'))
+        entities.append(BuyTile([5, 20], self.get_random_shop_item()[1]))
+        entities.append(BuyTile([5, 20], [WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20)]))
+
+
+
+
+

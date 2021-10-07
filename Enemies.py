@@ -27,7 +27,8 @@ class Enemy(Entity):
         return False
 
     def death_drops(self):
-        return [Coin(self.pos[0])]
+        if random.randint(1, 3) == 1:
+            return [Coin(self.pos[0])]
 
 
 class SprayerEnemy(Enemy):
@@ -147,9 +148,8 @@ class WormEnemy(Enemy):
 
 
 class WormWorldFucker(WormEnemy):
-    def __init__(self, position):
-        super(WormWorldFucker, self).__init__(
-            position, symbol=ANSI_RAINBOW('{}'), length=12)
+    def __init__(self, position, length=12):
+        super(WormWorldFucker, self).__init__(position, symbol=ANSI_RAINBOW('{}'), length=length)
         self.hp = 10
 
 

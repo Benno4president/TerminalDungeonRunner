@@ -1,3 +1,5 @@
+import time
+
 from EntityClass import Entity
 from Enums import Direction, EntType, Kind
 from Misc import to_list, ANSI_RED, ANSI_YELLOW, ANSI_GREEN, ANSI_CYAN, ANSI_RAINBOW, ANSI_BLUE, ANSI_PURPLE
@@ -36,13 +38,24 @@ class DamagingFloor(Entity):
 
 
 class Coin(Entity):
-    def __init__(self, position, amount=1):
-        super(Coin, self).__init__(ANSI_GREEN('$'), EntType.COIN)
+    def __init__(self, position, amount=1, symbol=ANSI_GREEN('$')):
+        super(Coin, self).__init__(symbol, EntType.COIN)
         self.set_pos(position)
         self.amount = amount
 
     def add_coin_to_player(self, player):
         player.coin += self.amount
+
+
+""" healing heart kinds works like the coin so yeah"""
+
+
+class HealingHeart(Coin):
+    def __init__(self, position, amount=1):
+        super(HealingHeart, self).__init__(position, amount, symbol=ANSI_BLUE('♥'))
+
+    def add_coin_to_player(self, player):
+        player.heal(self.amount)
 
 
 class Trigger(Entity):
@@ -194,22 +207,32 @@ class MultiShot(Item):
 class RailShot(Item):
     def __init__(self):
         self.length = 2
+        self.time_out: time = time.time()
 
     def update(self, position, player, shoot_bullet, dir=Direction.UP):
         if not shoot_bullet:
             return
+        if time.time() - self.time_out < 3:
+            return
+        self.time_out = time.time()
         bullet_list = []
         for i in range(1, self.length + 1):
             if dir == Direction.UP:
-                bullet_list.append(Bullet(dir, [position[0][0] - i + self.length*2, position[0][1]], kind=Kind.FRIENDLY, skip=self.length))
+                bullet_list.append(
+                    Bullet(dir, [position[0][0] - i + self.length * 2, position[0][1]], kind=Kind.FRIENDLY,
+                           skip=self.length))
             elif dir == Direction.DOWN:
-                bullet_list.append(Bullet(dir, [position[0][0] + i - self.length*2, position[0][1]], kind=Kind.FRIENDLY, skip=self.length))
+                bullet_list.append(
+                    Bullet(dir, [position[0][0] + i - self.length * 2, position[0][1]], kind=Kind.FRIENDLY,
+                           skip=self.length))
             elif dir == Direction.LEFT:
                 bullet_list.append(
-                    Bullet(dir, [position[0][0], position[0][1] - i + self.length*2], kind=Kind.FRIENDLY, skip=self.length))
+                    Bullet(dir, [position[0][0], position[0][1] - i + self.length * 2], kind=Kind.FRIENDLY,
+                           skip=self.length))
             elif dir == Direction.RIGHT:
                 bullet_list.append(
-                    Bullet(dir, [position[0][0], position[0][1] + i - self.length*2], kind=Kind.FRIENDLY, skip=self.length))
+                    Bullet(dir, [position[0][0], position[0][1] + i - self.length * 2], kind=Kind.FRIENDLY,
+                           skip=self.length))
 
         return bullet_list
 
