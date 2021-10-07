@@ -1,20 +1,32 @@
-# TerminalDungeonRunner
-A crappy, multi-platform, no requirements - python only Dungeon runner rendered in the terminal.. it works.. kinda.
+# TermialDungeonRunner (Name Only Temporary)
+This is a shitty, multi-platform dungeon runer written in python, using to externam modules... It works
 
-to play: open terminal and run main.py with python..
+### How to play the game?
+Well, it's quite simple actually. Have Python installed (Python 3), and run 
+`python3 main.py` 
 
-- python3 main.py
+**Well, how do i *play* the game?**
 
-Stuff to do:
-- better readme
+Again with the silly questions?
+
+WASD For moving
+  
+M = Shoot
+ 
+Thats it, now go kill %'s, #'s @'s and other evil characters
+ 
+ 
+## Now, this game is clearly not done, what needs to be done?
 - khbit function for windows support
-- more rooms
-  - casino
-  - crossroads (way to shop, other stuff...)
-- items
-  - more of them
-  - better scaled prices.. maybe scale money first
-  - cursed (devel deals?)
-- world
-  - different worlds
-  - more variation in world generation
+- Even more rooms
+  - Casino
+  - Crossroads
+  - Themeatic rooms
+- Items
+  - More items
+  - Better Prices
+  - A totally awesome sword, that is definetly working now, which is totally why im updating the readme
+  - Cursed Items (Devil Items)
+- World
+  - More ROOMS
+  - MORE WORLDGEN! 
