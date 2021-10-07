@@ -116,7 +116,7 @@ class SpecialRoomFactory:
 
     def get_next_room(self, player, entities_on_map):
         self.room_count += 1
-        if self.room_count == 1 or True:
+        if self.room_count == 1:
             self.start_room(player, entities_on_map)
             # self.shop_room(player, entities_on_map) # tester
         else:
