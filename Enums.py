@@ -4,6 +4,7 @@ from enum import Enum
 class Kind(Enum):
     FRIENDLY = 0
     ENEMY = 1
+    FUCKEVERYONE = 2
 
 
 class Direction(Enum):
@@ -24,4 +25,5 @@ class EntType(Enum):
     TRIGGER = 6
     SHOP = 7
     FLOOR = 8
+    BOMB = 9
 

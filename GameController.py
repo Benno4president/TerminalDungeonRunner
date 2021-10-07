@@ -48,8 +48,7 @@ class Game:
                 if (ent.type == EntType.BULLET or ent.type == EntType.FLOOR) and s_ent.type == EntType.ENEMY:
                     if ent.collides(s_ent) and ent.kind_of == Kind.FRIENDLY:
                         if s_ent.damage_and_is_dead():
-                            if ddrop := s_ent.death_drops():
-                                self.entities.extend(ddrop)  # ent could return drop
+                            self.entities.extend(s_ent.death_drops())  # ent could return drop
                             self.entities.remove(s_ent)
                         if ent in self.entities:
                             self.entities.remove(ent)
