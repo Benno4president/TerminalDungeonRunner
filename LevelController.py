@@ -171,8 +171,8 @@ class SpecialRoomFactory:
 
     def item_for_worms_room(self, player, entities):
         entities.extend(TextBox.add_word([4, 18], '..at least it\'s free'))
-        entities.append(BuyTile([5, 20], self.get_random_shop_item()[1]))
         entities.append(BuyTile([5, 20], [WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20)]))
+        entities.append(BuyTile([5, 20], self.get_random_shop_item()[1]))
 
 
 
