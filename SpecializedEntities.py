@@ -2,7 +2,7 @@ import time
 
 from EntityClass import Entity
 from Enums import Direction, EntType, Kind
-from Misc import to_list, ANSI_RED, ANSI_YELLOW, ANSI_GREEN, ANSI_CYAN, ANSI_RAINBOW, ANSI_BLUE, ANSI_PURPLE
+from Misc import ANSI_WHITE, to_list, ANSI_RED, ANSI_YELLOW, ANSI_GREEN, ANSI_CYAN, ANSI_RAINBOW, ANSI_BLUE, ANSI_PURPLE
 
 
 class Bullet(Entity):
@@ -243,3 +243,21 @@ class RailShot(Item):
 
     def upgrade(self):
         self.length += 1
+
+class Bomb(Entity):
+    def __init__(self, position, delay=15, symbol='O', kind=Kind.FRIENDLY):
+        super(Bomb, self).__init__(symbol, EntType.SHOP)
+        self.frames_before_removal = delay
+        self.kind_of: Kind = kind
+        self.set_pos(position)
+        self.destroy_this = False
+        self.delay = delay
+    def update(self, player):
+        self.frames_before_removal -= 1
+        if self.frames_before_removal <= 0:
+            return DamagingFloor(self.pos, symbol='O', delay=self.delay, kind=Kind.ENEMY)
+        
+        if self.frames_before_removal % 2 == 0:
+            self.symbol = ANSI_RED('O')
+        else:
+            self.symbol = ANSI_WHITE('O')

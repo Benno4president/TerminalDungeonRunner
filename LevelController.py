@@ -3,7 +3,7 @@ import random
 from Enemies import BulletBlaster, Enemy, BruteEnemy, SprayerEnemy, FloaterEnemy, WormEnemy, WormWorldFucker
 from Enums import EntType
 from Misc import clearConsole
-from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot, HealingHeart
+from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot, HealingHeart, Bomb
 
 
 class LevelHandler:
@@ -135,6 +135,8 @@ class SpecialRoomFactory:
         entities_on_map.extend(TextBox.add_word([14, 10], 'Leave this cursed game: l'))
         entities_on_map.append(BuyTile([1, 7], RailShot()))
         entities_on_map.append(BuyTile([1, 5], RailShot()))
+
+        entities_on_map.append(Bomb([10,30]))
 
     def shop_room(self, player, entities_on_map):
 
