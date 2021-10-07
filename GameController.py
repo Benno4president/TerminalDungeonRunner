@@ -5,6 +5,7 @@ from LevelController import LevelHandler
 from Misc import to_list
 from SpecializedEntities import Player, Coin
 
+
 class Game:
     def __init__(self, height: int = 20, width: int = 60):
         self.player = Player(6)
@@ -29,13 +30,13 @@ class Game:
                 if self.player.collides(ent):
                     self.player.damage()
             elif ent.type == EntType.COIN and self.player.collides(ent):
-                ent.add_coin_to_player(self.player)
+                ent.add_pickup_to_player(self.player)
                 self.entities.remove(ent)
             elif ent.type == EntType.SHOP:
                 if shop_drop := to_list(ent.update(self.player)):
                     self.entities.extend(shop_drop)
                     self.entities.remove(ent)
-                if ent.destroy_this:
+                elif ent.destroy_this:
                     self.entities.remove(ent)
             elif ent.type == EntType.TRIGGER and self.player.collides(ent):
                 self.lvlh.trigger_hit()
@@ -44,14 +45,20 @@ class Game:
                     self.entities.remove(ent)
 
         for ent in self.entities:
+            if not (ent.type == EntType.BULLET or ent.type == EntType.FLOOR):
+                continue
+            if not ent.kind_of == Kind.FRIENDLY:
+                continue
             for s_ent in self.entities:
-                if (ent.type == EntType.BULLET or ent.type == EntType.FLOOR) and s_ent.type == EntType.ENEMY:
-                    if ent.collides(s_ent) and ent.kind_of == Kind.FRIENDLY:
-                        if s_ent.damage_and_is_dead():
-                            self.entities.extend(s_ent.death_drops())  # ent could return drop
-                            self.entities.remove(s_ent)
-                        if ent in self.entities:
-                            self.entities.remove(ent)
+                if not s_ent.type == EntType.ENEMY:
+                    continue
+                if ent.collides(s_ent):
+                    if s_ent.damage_and_is_dead():
+                        if ddrop := s_ent.death_drops():
+                            self.entities.extend(ddrop)  # ent could return drop
+                        self.entities.remove(s_ent)
+                    if ent in self.entities:
+                        self.entities.remove(ent)
 
         for ent in self.entities:
             if self.grid.is_point_wall(ent, self.entities):

@@ -43,7 +43,7 @@ class Coin(Entity):
         self.set_pos(position)
         self.amount = amount
 
-    def add_coin_to_player(self, player):
+    def add_pickup_to_player(self, player):
         player.coin += self.amount
 
 
@@ -54,7 +54,7 @@ class HealingHeart(Coin):
     def __init__(self, position, amount=1):
         super(HealingHeart, self).__init__(position, amount, symbol=ANSI_BLUE('♥'))
 
-    def add_coin_to_player(self, player):
+    def add_pickup_to_player(self, player):
         player.heal(self.amount)
 
 
@@ -180,10 +180,15 @@ class NeonCat(Item):
 class MultiShot(Item):
     def __init__(self):
         self.shots = 2
+        self.time_out: time = time.time()
+
 
     def update(self, position, player, shoot_bullet, dir=Direction.UP):
         if not shoot_bullet:
             return
+        if time.time() - self.time_out < 2:
+            return
+        self.time_out = time.time()
         bullet_placement = 1
         bullet_list = []
         for i in range(1, self.shots + 1):

@@ -1,6 +1,6 @@
 from EntityClass import Entity
 from Enums import EntType
-from Misc import moveCursor
+from Misc import moveCursor, ANSI_BLUE, ANSI_GREEN
 
 
 class Grid:
@@ -27,7 +27,7 @@ class Grid:
             row_char_list = []
             for col in range(self.width + 1):
                 row_char_list.append(' ')
-            row_char_list.append('\n')
+            # row_char_list.append('\n')
             _grid.append(row_char_list)
 
         if self.is_point_wall(player, entities):
@@ -54,8 +54,21 @@ class Grid:
         # clearConsole(self.width)
         """ flush and move cursor to 0,0 so no screen tear """
         moveCursor()
+        l_ui = self.ui_left(player)
         for row in self.grid_to_print:
+            print(l_ui.pop(0), end='')
             for col in row:
                 print(col, sep='', end='')
-        print(
-            f'[ Exit:l Move:awsd   hp:{player.hp} ${player.coin} xy:{player.pos}]')
+            print('')
+
+    def ui_left(self, player):
+        size = 10
+        r_ui = [
+            "/" + (size-2) * "^" + "\\",
+            f"| {ANSI_BLUE('♥')}:{player.hp}".ljust(size+8) + "|",
+            f"| {ANSI_GREEN('$')}:{player.coin}".ljust(size +8) + "|",
+            "|" + (size-2) * "_" + "|"
+        ]
+        for i in range((self.height - len(r_ui)) + 1):
+            r_ui.append('|'.ljust(size-1) + '|')
+        return r_ui
