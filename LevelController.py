@@ -97,24 +97,27 @@ class SpecialRoomFactory:
         self.rooms = {
             1: self.shop_room,
             2: self.fire_place_room,
-            3: self.boss_worms
+            3: self.item_for_worms_room
         }
         """ shop dict: id: list[ Shop name, instance, price ] """
         self.shop_item_selection = {
-            1: ['Rail Shot:', RailShot(), random.randint(5, 9)],
-            2: ['Broad Shot:', MultiShot(), random.randint(5, 9)],
-            3: ['Neon Cat:', NeonCat(), random.randint(5, 9)]
+            1: ['Rail Shot:', RailShot(), 10],
+            2: ['Broad Shot:', MultiShot(), 12],
+            3: ['Neon Cat:', NeonCat(), 8]
         }
 
-    def get_random_shop_item(self):
+    def get_random_shop_item(self, rand_price: bool = True):
         item_num = random.randint(1, len(self.shop_item_selection))
-        item = self.shop_item_selection[item_num]
+        item = self.shop_item_selection[item_num][:]
+        if rand_price:
+            item[2] += random.randint(-5, 5)
         return item
 
     def get_next_room(self, player, entities_on_map):
         self.room_count += 1
-        if self.room_count == 1:
+        if self.room_count == 1 or True:
             self.start_room(player, entities_on_map)
+            # self.shop_room(player, entities_on_map) # tester
         else:
             room_num = random.randint(1, len(self.rooms))
             room_func = self.rooms[room_num]
@@ -130,7 +133,7 @@ class SpecialRoomFactory:
         entities_on_map.extend(TextBox.add_word([12, 10], 'Shoot: m'))
         entities_on_map.extend(TextBox.add_word([14, 10], 'Leave this cursed game: l'))
         entities_on_map.append(BuyTile([1, 7], RailShot()))
-        entities_on_map.append(BuyTile([1, 7], RailShot()))
+        entities_on_map.append(BuyTile([1, 5], RailShot()))
 
     def shop_room(self, player, entities_on_map):
 
@@ -165,12 +168,12 @@ class SpecialRoomFactory:
 
         entities.append(HealingHeart([10, 20]))
 
-    def boss_worms(self, player, entities):
+    def item_for_worms_room(self, player, entities):
+        entities.extend(TextBox.add_word([4, 18], '..at least it\'s free'))
         entities.append(BuyTile([5, 20], self.get_random_shop_item()[1]))
-        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
-        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
-        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
-        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
-        entities.append(BuyTile([5, 20], WormWorldFucker([15, 3], 20)))
+        entities.append(BuyTile([5, 20], [WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20)]))
+
+
+
 
 
