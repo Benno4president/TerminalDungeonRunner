@@ -64,11 +64,11 @@ class Grid:
     def ui_left(self, player):
         size = 10
         r_ui = [
-            "|" + (size-2) *"_" + "|",
-            f"| {ANSI_BLUE('♥')}:{player.hp}" + "    |",
-            f"| {ANSI_GREEN('$')}:{player.coin}" + "    |",
+            "/" + (size-2) * "^" + "\\",
+            f"| {ANSI_BLUE('♥')}:{player.hp}".ljust(size+8) + "|",
+            f"| {ANSI_GREEN('$')}:{player.coin}".ljust(size +8) + "|",
             "|" + (size-2) * "_" + "|"
         ]
         for i in range((self.height - len(r_ui)) + 1):
-            r_ui.append('|' * size)
+            r_ui.append('|'.ljust(size-1) + '|')
         return r_ui
