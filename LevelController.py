@@ -1,6 +1,6 @@
 import random
 
-from Enemies import Enemy, BruteEnemy, SprayerEnemy, FloaterEnemy, WormEnemy, WormWorldFucker
+from Enemies import BulletBlaster, Enemy, BruteEnemy, SprayerEnemy, FloaterEnemy, WormEnemy, WormWorldFucker
 from Enums import EntType
 from Misc import clearConsole
 from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot
@@ -57,7 +57,8 @@ class LevelHandler:
                            '3': SprayerEnemy(self.random_pos()),
                            '4': FloaterEnemy(self.random_pos()),
                            '5': WormEnemy(self.random_pos()),
-                           '6': WormWorldFucker(self.random_pos())
+                           '6': WormWorldFucker(self.random_pos()),
+                           '7': BulletBlaster(self.random_pos())
                            }
         for i in range(self.current_floor):
             enemy = enemy_selection[str(random.randint(1, len(enemy_selection)))]

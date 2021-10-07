@@ -76,7 +76,8 @@ class FloaterEnemy(Enemy):
         _p = position
         new_pos = [[_p[0] - 1, _p[1] - 1], [_p[0] - 1, _p[1]], [_p[0] - 1, _p[1] + 1],
                    [_p[0], _p[1] - 1], [_p[0], _p[1]], [_p[0], _p[1] + 1],
-                   [_p[0] + 1, _p[1] - 1], [_p[0] + 1, _p[1]], [_p[0] + 1, _p[1] + 1]
+                   [_p[0] + 1, _p[1] - 1], [_p[0] + 1,
+                                            _p[1]], [_p[0] + 1, _p[1] + 1]
                    ]
 
         super(FloaterEnemy, self).__init__(new_pos, symbol=ANSI_YELLOW('€'))
@@ -93,10 +94,14 @@ class FloaterEnemy(Enemy):
         if time.time() - self.shot_timeout > 4:
             self.shot_timeout = time.time()
             bullet_list = []
-            bullet_list.append(Bullet(Direction.UP, self.pos, symbol=ANSI_CYAN('*')))
-            bullet_list.append(Bullet(Direction.DOWN, self.pos, symbol=ANSI_CYAN('*')))
-            bullet_list.append(Bullet(Direction.RIGHT, self.pos, symbol=ANSI_CYAN('*')))
-            bullet_list.append(Bullet(Direction.LEFT, self.pos, symbol=ANSI_CYAN('*')))
+            bullet_list.append(
+                Bullet(Direction.UP, self.pos, symbol=ANSI_CYAN('*')))
+            bullet_list.append(
+                Bullet(Direction.DOWN, self.pos, symbol=ANSI_CYAN('*')))
+            bullet_list.append(
+                Bullet(Direction.RIGHT, self.pos, symbol=ANSI_CYAN('*')))
+            bullet_list.append(
+                Bullet(Direction.LEFT, self.pos, symbol=ANSI_CYAN('*')))
             return bullet_list
 
 
@@ -143,8 +148,46 @@ class WormEnemy(Enemy):
 
 class WormWorldFucker(WormEnemy):
     def __init__(self, position):
-        super(WormWorldFucker, self).__init__(position, symbol=ANSI_RAINBOW('{}'), length=12)
+        super(WormWorldFucker, self).__init__(
+            position, symbol=ANSI_RAINBOW('{}'), length=12)
         self.hp = 10
 
 
 """ trailer, enemy which drops toxic trail """
+
+
+class BulletBlaster(Enemy):
+    def __init__(self, position, symbol=ANSI_RED(':D')):
+        super(Enemy, self).__init__(symbol, EntType.ENEMY)
+        self.hp = 4
+        self.set_pos(position)
+        self.shot_timeout: time = time.time()
+
+    def update(self, player):
+        num = random.randint(1, 5)
+        if num == 1:
+            self.move_towards(player)
+        else:
+            self.move_random_dir()
+            
+        if time.time() - self.shot_timeout > 0.5:
+            self.shot_timeout = time.time()
+            bullet_list = []
+            bullet_list.append(
+                Bullet(Direction.UP, self.pos, symbol=ANSI_RAINBOW('*')))
+            bullet_list.append(
+                Bullet(Direction.DOWN, self.pos, symbol=ANSI_RAINBOW('*')))
+            bullet_list.append(
+                Bullet(Direction.RIGHT, self.pos, symbol=ANSI_RAINBOW('*')))
+            bullet_list.append(
+                Bullet(Direction.LEFT, self.pos, symbol=ANSI_RAINBOW('*')))
+            return bullet_list
+
+    def damage_and_is_dead(self):
+        self.hp -= 1
+        if self.hp <= 0:
+            return True
+        return False
+
+    def death_drops(self):
+        return [Coin(self.pos[0])]
