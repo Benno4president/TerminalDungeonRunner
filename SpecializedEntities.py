@@ -122,8 +122,9 @@ class Wall(Entity):
 class Player(Entity):
     def __init__(self, hp):
         super(Player, self).__init__(ANSI_BLUE('@'), EntType.PLAYER)
-        self.hp = hp
+        self.hp: int = hp
         self.coin = 0
+        self.score = 1
         self.item_list = []
         self.set_pos([6, 30])
 
@@ -143,8 +144,6 @@ class Player(Entity):
 
     def damage(self):
         self.hp -= 1
-        if self.hp <= 0:
-            self.hp = int(input('Game over, type new hp to continue..'))  # some real code to die
 
     def heal(self, amount=1):
         self.hp += amount

@@ -16,6 +16,9 @@ class Game:
 
     def update(self, key_input: Direction, shoot_bullet: bool):
         """ update everything """
+        if self.player.hp < 1:
+            return self.player.score
+
         if player_objects := to_list(self.player.update(key_input, shoot_bullet, self.entities)):
             self.entities.extend(player_objects)
 
