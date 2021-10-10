@@ -136,6 +136,11 @@ def read_text_file(filename):
     return lines
 
 
+def write_text_file(lines, filename):
+    with open(filename, 'w') as f:
+        f.writelines(lines)
+
+
 def to_list(_input):
     if _input is None:
         return []
