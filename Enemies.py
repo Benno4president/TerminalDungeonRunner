@@ -184,9 +184,10 @@ class BulletBlaster(Enemy):
                 Bullet(Direction.LEFT, self.pos, symbol=ANSI_RAINBOW('*')))
             return bullet_list
 
-class testtest(Enemy):
+
+class Dunnis(Enemy):
     def __init__(self, position, symbol=ANSI_GREEN('§')):
-        super(testtest, self).__init__(position, symbol)
+        super(Dunnis, self).__init__(position, symbol)
         self.hp = 3
         self.shot_timeout: time = time.time()
 
@@ -197,9 +198,9 @@ class testtest(Enemy):
             self.move_random_dir()
             self.move_random_dir()
         elif num == 2:
-            self.move_towards([9, 30])
-            self.move_towards([9, 30])
-            self.move_towards([9, 30])
+            self.move_towards(player)
+            self.move_towards(player)
+            self.move_towards(player)
 
         if time.time() - self.shot_timeout > 0.5:
             _dir = self.dir_of(player)
