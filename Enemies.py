@@ -59,6 +59,7 @@ class BruteEnemy(Enemy):
         self.hp = 3
         self.shot_timeout: time = time.time()
 
+
     def update(self, player):
         num = random.randint(1, 2)
         if num == 1:
@@ -182,4 +183,26 @@ class BulletBlaster(Enemy):
             bullet_list.append(
                 Bullet(Direction.LEFT, self.pos, symbol=ANSI_RAINBOW('*')))
             return bullet_list
+
+class testtest(Enemy):
+    def __init__(self, position, symbol=ANSI_GREEN('§')):
+        super(testtest, self).__init__(position, symbol)
+        self.hp = 3
+        self.shot_timeout: time = time.time()
+
+    def update(self, player):
+        num = random.randint(1,3)
+        if num == 1:
+            self.move_random_dir()
+            self.move_random_dir()
+            self.move_random_dir()
+        elif num == 2:
+            self.move_towards([9, 30])
+            self.move_towards([9, 30])
+            self.move_towards([9, 30])
+
+        if time.time() - self.shot_timeout > 0.5:
+            _dir = self.dir_of(player)
+            self.shot_timeout = time.time()
+            return Bullet(_dir, self.pos, symbol=ANSI_CYAN('-'))
 
