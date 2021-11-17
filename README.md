@@ -1,5 +1,5 @@
 # TermialDungeonRunner (Name Only Temporary)
-This is a shitty, multi-platform dungeon runer written in python, using to externam modules... It works
+This is a shitty, multi-platform dungeon runner written in python, using no external modules... It works
 
 ### How to play the game?
 Well, it's quite simple actually. Have Python installed (Python 3), and run 
