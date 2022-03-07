@@ -1,6 +1,6 @@
 from EntityClass import Entity
 from Enums import EntType
-from Misc import moveCursor, ANSI_BLUE, ANSI_GREEN
+from Misc import moveCursor, ANSI_BLUE, ANSI_GREEN, ANSI_YELLOW
 
 
 class Grid:
@@ -62,13 +62,18 @@ class Grid:
             print('')
 
     def ui_left(self, player):
-        size = 10
+        size = 14
         r_ui = [
             "/" + (size-2) * "^" + "\\",
             f"| {ANSI_BLUE('♥')}:{player.hp}".ljust(size+8) + "|",
             f"| {ANSI_GREEN('$')}:{player.coin}".ljust(size +8) + "|",
-            "|" + (size-2) * "_" + "|"
+            f"| {ANSI_YELLOW('¤')}:{player.score}".ljust(size +8) + "|",
+            "|" + (size-2) * "_" + "|"    
         ]
+        for item in player.item_list:
+            r_ui.append(f"| {item.name}".ljust(size-1) + "|")
+            r_ui.append(f"| x{item.lvl}".ljust(size-1) + "|")
+
         for i in range((self.height - len(r_ui)) + 1):
             r_ui.append('|'.ljust(size-1) + '|')
         return r_ui

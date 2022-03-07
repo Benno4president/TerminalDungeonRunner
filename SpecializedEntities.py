@@ -31,10 +31,38 @@ class DamagingFloor(Entity):
         self.kind_of: Kind = kind
         self.set_pos(position)
 
-    def update(self):
+    def update(self, player):
         self.frames_before_removal -= 1
         if self.frames_before_removal <= 0:
             return True
+        if self.kind_of == Kind.ENEMY and self.collides(player):
+            player.damage()
+
+
+class Bomb(Entity):
+    def __init__(self, position, delay=15, radius=2, symbol='O', kind=Kind.FRIENDLY):
+        super(Bomb, self).__init__(symbol, EntType.SHOP)
+        self.frames_before_removal = delay
+        self.kind_of: Kind = kind
+        self.set_pos(position)
+ 
+        self.explosion_pos = []
+        for x in range(-radius, radius):
+            for y in range(-radius, radius):
+                self.explosion_pos.append([position[0] + x, position[1] + y])
+
+        self.destroy_this = False
+        self.delay = delay
+
+    def update(self, player):
+        self.frames_before_removal -= 1
+        if self.frames_before_removal <= 0:
+            return DamagingFloor(self.explosion_pos, symbol='O', delay=4, kind=Kind.ENEMY)
+        
+        if self.frames_before_removal % 2 == 0:
+            self.symbol = ANSI_RED('O')
+        else:
+            self.symbol = ANSI_WHITE('O')
 
 
 class Coin(Entity):
@@ -124,7 +152,7 @@ class Player(Entity):
         super(Player, self).__init__(ANSI_BLUE('@'), EntType.PLAYER)
         self.hp: int = hp
         self.coin = 0
-        self.score = 1
+        self.score = 0
         self.item_list = []
         self.set_pos([6, 30])
 
@@ -167,17 +195,21 @@ class Item:
 
 class NeonCat(Item):
     def __init__(self):
+        self.name = 'Neon Trail'
+        self.lvl = 0
         self.trail_length = 4
-
+        
     def update(self, position, player, shoot_bullet, dir=Direction.UP):
         return DamagingFloor(position, self.trail_length, symbol=ANSI_RAINBOW('x'))
 
     def upgrade(self):
         self.trail_length += 3
-
+        self.lvl += 0
 
 class MultiShot(Item):
     def __init__(self):
+        self.name = 'Broad Shot'
+        self.lvl = 0
         self.shots = 2
         self.time_out: time = time.time()
 
@@ -206,11 +238,14 @@ class MultiShot(Item):
 
     def upgrade(self):
         self.shots += 2
+        self.lvl += 1
 
 
 class RailShot(Item):
     def __init__(self):
+        self.name = 'Rail Shot'
         self.length = 2
+        self.lvl = 1
         self.time_out: time = time.time()
 
     def update(self, position, player, shoot_bullet, dir=Direction.UP):
@@ -242,21 +277,5 @@ class RailShot(Item):
 
     def upgrade(self):
         self.length += 1
+        self.lvl += 1
 
-class Bomb(Entity):
-    def __init__(self, position, delay=15, symbol='O', kind=Kind.FRIENDLY):
-        super(Bomb, self).__init__(symbol, EntType.SHOP)
-        self.frames_before_removal = delay
-        self.kind_of: Kind = kind
-        self.set_pos(position)
-        self.destroy_this = False
-        self.delay = delay
-    def update(self, player):
-        self.frames_before_removal -= 1
-        if self.frames_before_removal <= 0:
-            return DamagingFloor(self.pos, symbol='O', delay=self.delay, kind=Kind.ENEMY)
-        
-        if self.frames_before_removal % 2 == 0:
-            self.symbol = ANSI_RED('O')
-        else:
-            self.symbol = ANSI_WHITE('O')

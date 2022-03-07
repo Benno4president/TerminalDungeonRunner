@@ -44,7 +44,7 @@ class Game:
             elif ent.type == EntType.TRIGGER and self.player.collides(ent):
                 self.lvlh.trigger_hit()
             elif ent.type == EntType.FLOOR:
-                if ent.update():
+                if ent.update(self.player):
                     self.entities.remove(ent)
 
         for ent in self.entities:
@@ -57,6 +57,7 @@ class Game:
                     continue
                 if ent.collides(s_ent):
                     if s_ent.damage_and_is_dead():
+                        self.player.score += 1
                         if ddrop := s_ent.death_drops():
                             self.entities.extend(ddrop)  # ent could return drop
                         self.entities.remove(s_ent)

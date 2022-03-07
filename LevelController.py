@@ -1,6 +1,6 @@
 import random
 
-from Enemies import BulletBlaster, Enemy, BruteEnemy, SprayerEnemy, FloaterEnemy, WormEnemy, WormWorldFucker, Dunnis
+from Enemies import BulletBlaster, Enemy, BruteEnemy, SprayerEnemy, FloaterEnemy, WormEnemy, WormSeeker, WormWorldFucker, Dunnis
 from Enums import EntType
 from Misc import clearConsole
 from SpecializedEntities import Trigger, Wall, BuyTile, NeonCat, MultiShot, TextBox, RailShot, HealingHeart, Bomb
@@ -59,7 +59,8 @@ class LevelHandler:
                            '5': WormEnemy(self.random_pos()),
                            '6': WormWorldFucker(self.random_pos()),
                            '7': BulletBlaster(self.random_pos()),
-                           '8': Dunnis(self.random_pos())
+                           '8': Dunnis(self.random_pos()),
+                           '9': WormSeeker(self.random_pos())
                            }
         for i in range(self.current_floor):
             enemy = enemy_selection[str(random.randint(1, len(enemy_selection)))]
@@ -99,7 +100,8 @@ class SpecialRoomFactory:
         self.rooms = {
             1: self.shop_room,
             2: self.fire_place_room,
-            3: self.item_for_worms_room
+            3: self.item_for_worms_room,
+            4: self.explosive_worms_ambush_room
         }
         """ shop dict: id: list[ Shop name, instance, price ] """
         self.shop_item_selection = {
@@ -129,16 +131,16 @@ class SpecialRoomFactory:
         entities_on_map.extend(TextBox.add_word([1, 10], 'Hello there,'))
         entities_on_map.extend(TextBox.add_word([2, 10], 'welcome to a generic terminal dungeon runner'))
         entities_on_map.extend(TextBox.add_word([3, 10], 'May you journey be filled with horrible'))
-        entities_on_map.extend(TextBox.add_word([4, 10], 'bugs and bullsh*t spawn deaths'))
+        entities_on_map.extend(TextBox.add_word([4, 10], 'bugs and bullsh*t enemy noclips'))
         entities_on_map.extend(TextBox.add_word([6, 10], 'Good fucking luck.'))
         entities_on_map.extend(TextBox.add_word([10, 10], 'Move: wasd'))
         entities_on_map.extend(TextBox.add_word([12, 10], 'Shoot: m'))
         entities_on_map.extend(TextBox.add_word([14, 10], 'Leave this cursed game: l'))
-        entities_on_map.append(BuyTile([1, 7], RailShot()))
-        entities_on_map.append(BuyTile([1, 5], RailShot()))
+        # entities_on_map.append(BuyTile([1, 7], RailShot()))
+        # entities_on_map.append(BuyTile([1, 5], RailShot()))
 
-        entities_on_map.append(Bomb([10, 30]))
-        entities_on_map.append(Dunnis([10, 30]))
+        # entities_on_map.append(Bomb([10, 30], radius=6))
+        # entities_on_map.append(Dunnis([10, 30]))
 
     def shop_room(self, player, entities_on_map):
 
@@ -146,7 +148,7 @@ class SpecialRoomFactory:
         entities_on_map.extend(TextBox.add_word([1, 28], 'Yee ol\' Shop'))
         entities_on_map.extend(TextBox.add_word([12, 30], '> Welcome UwU,'))
         entities_on_map.extend(TextBox.add_word([13, 30], '  puiz buy my stuff<3<3'))
-        entities_on_map.extend(TextBox.add_word([14, 30], '  i need herOwOin'))
+        entities_on_map.extend(TextBox.add_word([14, 30], '  i need herUwUin'))
         entities_on_map.extend(TextBox.add_word([16, 30], '  ,---/V\\'))
         entities_on_map.extend(TextBox.add_word([17, 30], ' ~|__(o.o)'))
         entities_on_map.extend(TextBox.add_word([18, 30], '  UU  UU'))
@@ -178,6 +180,19 @@ class SpecialRoomFactory:
         entities.append(BuyTile([5, 20], [WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20), WormWorldFucker([15, 3], 20)]))
         entities.append(BuyTile([5, 20], self.get_random_shop_item()[1]))
 
+    def explosive_worms_ambush_room(self, player, entities):
+        entities.extend(TextBox.add_word([11, 28], 'oh NO!'))
+        entities.extend(TextBox.add_word([17, 1], '  ,---/V\\'))
+        entities.extend(TextBox.add_word([18, 1], ' ~|__(o.o)'))
+        entities.append(HealingHeart([18, 8]))
+        entities.append(WormSeeker([2, 2]))
+        entities.append(WormSeeker([2, 2]))
+        entities.append(WormSeeker([18, 50]))
+        entities.append(WormSeeker([18, 50]))
+        entities.append(WormSeeker([2, 50]))
+        entities.append(WormSeeker([2, 50]))
+        entities.append(WormSeeker([18, 2]))
+        entities.append(WormSeeker([18, 2]))
 
 
 

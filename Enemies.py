@@ -4,7 +4,7 @@ import time
 from EntityClass import Entity
 from Enums import EntType, Direction
 from Misc import ANSI_RED, ANSI_YELLOW, ANSI_GREEN, ANSI_CYAN, ANSI_RAINBOW, ANSI_BLUE, ANSI_PURPLE
-from SpecializedEntities import Bullet, Coin
+from SpecializedEntities import Bullet, Coin, Bomb
 
 
 class Enemy(Entity):
@@ -146,15 +146,21 @@ class WormEnemy(Enemy):
 
 
 """ worm, the world fucker (worm with more than 1 char as symbol, maybe rainbow?)"""
-
-
 class WormWorldFucker(WormEnemy):
     def __init__(self, position, length=12):
         super(WormWorldFucker, self).__init__(position, symbol=ANSI_RAINBOW('{}'), length=length)
         self.hp = 10
 
+""" worm that drop a live bomb on death """
+class WormSeeker(WormEnemy):
+    def __init__(self, position, length=3):
+        super(WormSeeker, self).__init__(position, symbol=ANSI_RED('O'), length=length)
+        self.hp = 2
+    
+    def death_drops(self):
+        return [Bomb(self.pos[1], delay=7, radius=4)]
 
-""" trailer, enemy which drops toxic trail """
+""" trailer, enemy which drops toxic trail  - not implemented"""
 
 
 class BulletBlaster(Enemy):
@@ -171,7 +177,7 @@ class BulletBlaster(Enemy):
         else:
             self.move_random_dir()
             
-        if time.time() - self.shot_timeout > 0.5:
+        if time.time() - self.shot_timeout > 1.2:
             self.shot_timeout = time.time()
             bullet_list = []
             bullet_list.append(
