@@ -166,7 +166,7 @@ class WormSeeker(WormEnemy):
 class BulletBlaster(Enemy):
     def __init__(self, position, symbol=ANSI_RED(':D')):
         super(Enemy, self).__init__(symbol, EntType.ENEMY)
-        self.hp = 4
+        self.hp = 2
         self.set_pos(position)
         self.shot_timeout: time = time.time()
 
@@ -177,7 +177,7 @@ class BulletBlaster(Enemy):
         else:
             self.move_random_dir()
             
-        if time.time() - self.shot_timeout > 1.2:
+        if time.time() - self.shot_timeout > 1.5:
             self.shot_timeout = time.time()
             bullet_list = []
             bullet_list.append(
@@ -208,7 +208,7 @@ class Dunnis(Enemy):
             self.move_towards(player)
             self.move_towards(player)
 
-        if time.time() - self.shot_timeout > 0.5:
+        if time.time() - self.shot_timeout > 0.65:
             _dir = self.dir_of(player)
             self.shot_timeout = time.time()
             return Bullet(_dir, self.pos, symbol=ANSI_CYAN('-'))
